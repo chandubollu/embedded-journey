@@ -1,0 +1,23 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+int n;
+printf("enter size of array\n");
+scanf("%d",&n);
+/* we are not able to allocate memory at run time
+int A[n] it is invalid
+by using calloc we can allocate memory at run time*/
+int *A=(int*)calloc(n,sizeof(int));//dynamically allocated array
+for(int i=0;i<n;i++)
+{
+A[i]=i+1;
+}
+int* B=(int*)realloc(A,(n/2)*sizeof(int));
+printf("prev block address =%p,new address=%p\n",A,B);
+//free(A);
+for(int i=0;i<n;i++)
+{
+printf("%d\n",B[i]);
+}
+}
