@@ -21,7 +21,7 @@ This command:
 tail -n 50 -f log.txt
 ```
 
-This command shows the **last 50 lines** of `log.txt` and keeps updating the screen whenever new log messages are written.
+This command shows the last **50 lines** of `log.txt` and keeps updating the screen whenever new log messages are written.
 
 ## Why the Other Options Are Wrong
 
@@ -37,8 +37,10 @@ Use:
 tail -n 50 -f log.txt
 ```
 
-to **view the last 50 lines of a log file and monitor new log entries in real time.**
-````markdown id="zw0l31"
+to view the **last 50 lines** of a log file and monitor **new log entries in real time**.
+
+---
+
 # A2. Which is the modern, faster alternative to grep for recursive code search?
 
 ### **Correct Answer:** ✅ **(b) `rg` (ripgrep)**
@@ -66,9 +68,9 @@ This searches for the word **"main"** in all files inside the current folder and
 ### Summary
 
 Use **`rg` (ripgrep)** for **fast recursive code searching** in projects.
-````
 
-````markdown id="g5v4k8"
+---
+
 # A3. `Ctrl + C` in a terminal sends which signal to the foreground process?
 
 ### **Correct Answer:** ✅ **(c) SIGINT**
@@ -81,13 +83,11 @@ It tells the program to **stop running**.
 
 ### Example
 
-Suppose you run:
+Run:
 
 ```bash
 ping google.com
 ```
-
-It keeps running continuously.
 
 Press:
 
@@ -99,15 +99,16 @@ The program stops immediately.
 
 ## Why the Other Options Are Wrong
 
-- ❌ **(a) SIGTERM** – Requests a program to terminate gracefully, but it is **not** sent by `Ctrl + C`.
-- ❌ **(b) SIGKILL** – Forcefully kills a program and cannot be ignored. It is **not** sent by `Ctrl + C`.
-- ❌ **(d) SIGSTOP** – Pauses (stops) a program without terminating it. It is **not** sent by `Ctrl + C`.
+- ❌ **(a)** `SIGTERM` is not sent by `Ctrl + C`.
+- ❌ **(b)** `SIGKILL` forcefully kills a process and is not sent by `Ctrl + C`.
+- ❌ **(d)** `SIGSTOP` pauses a process but is not sent by `Ctrl + C`.
 
 ### Summary
 
 **`Ctrl + C` sends the `SIGINT` signal to interrupt and stop the currently running program.**
-````
-````markdown id="ccu6gq"
+
+---
+
 # A4. `Ctrl + Z` does what, and how do you resume?
 
 ### **Correct Answer:** ✅ **(b)**
@@ -116,7 +117,7 @@ The program stops immediately.
 
 ## Simple Explanation
 
-Pressing **`Ctrl + Z`** **pauses (suspends)** the currently running program. It does **not** stop or kill the program.
+Pressing **`Ctrl + Z`** pauses (suspends) the currently running program. It does **not** stop or kill the program.
 
 To continue running the paused program, use:
 
@@ -124,7 +125,7 @@ To continue running the paused program, use:
 fg
 ```
 
-This brings the program back to the foreground.
+This resumes the program in the foreground.
 
 ### Example
 
@@ -146,7 +147,7 @@ Output:
 [1]+ Stopped ping google.com
 ```
 
-To continue:
+Resume the program:
 
 ```bash
 fg
@@ -164,5 +165,4 @@ The `ping` command starts running again.
 
 - **`Ctrl + Z`** → Suspends (pauses) the current program.
 - **`fg`** → Resumes the suspended program in the foreground.
-````
-
+```
