@@ -1,4 +1,4 @@
-function pointers
+# function pointers
 as the name suggests ,it is used to store address of functions.so far we used pointers as variables 
 that would store address of other variables.
 basically pointers are variables that would store address of other variables.
