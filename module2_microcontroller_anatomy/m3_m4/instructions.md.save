@@ -1,0 +1,1610 @@
+Excellent! 🎉
+
+You've now entered **Chapter 5: Instruction Set**.
+
+This chapter is not about memorizing instructions like `ADD`, `MOV`, `LDR`. Instead, it first explains **why ARM created different instruction sets** and how they evolved.
+
+Many beginners get confused by terms like:
+
+* ARM Instruction Set
+* Thumb
+* Thumb-2
+* ARMv4
+* ARMv7-M
+* ARMv8
+
+Let's simplify everything.
+
+---
+
+# 📖 5.1 Background to the Instruction Set in ARM Cortex-M Processors
+
+The book starts with:
+
+> **The design of the instruction set is one of the most important parts of a processor's architecture.**
+
+First question...
+
+## What is an Instruction Set?
+
+Remember our previous discussion?
+
+The CPU understands **machine instructions**, not C.
+
+For example:
+
+```c
+int c = a + b;
+```
+
+The compiler converts it into something like:
+
+```assembly
+LDR R0, [R1]
+LDR R2, [R3]
+ADD R0, R0, R2
+STR R0, [R4]
+```
+
+Here,
+
+```text
+LDR
+ADD
+STR
+```
+
+are **instructions**.
+
+The complete collection of instructions a CPU understands is called the **Instruction Set**.
+
+---
+
+# What is ISA?
+
+The book says:
+
+> **Instruction Set Architecture (ISA)**
+
+Think of ISA as the **language spoken by the processor**.
+
+Example:
+
+Different people speak different languages.
+
+```text
+Person A
+
+↓
+
+English
+
+----------------
+
+Person B
+
+↓
+
+Telugu
+
+----------------
+
+Person C
+
+↓
+
+Hindi
+```
+
+Similarly,
+
+different processors understand different instruction sets.
+
+```text
+Intel CPU
+
+↓
+
+x86 ISA
+
+----------------
+
+ARM Cortex-M
+
+↓
+
+Thumb-2 ISA
+
+----------------
+
+RISC-V
+
+↓
+
+RISC-V ISA
+```
+
+ISA defines:
+
+* Which instructions exist
+* Registers
+* Memory addressing
+* Instruction format
+* Processor behavior
+
+---
+
+# The Book Says
+
+> **All Cortex-M processors are based on Thumb-2 technology.**
+
+This is one of the most important sentences.
+
+We'll understand it by looking at history.
+
+---
+
+# Step 1: Original ARM Instruction Set
+
+In the beginning,
+
+ARM processors understood only one instruction set.
+
+```text
+ARM Instruction Set
+```
+
+Every instruction was
+
+```text
+32 bits
+```
+
+Example:
+
+```text
+ADD
+
+↓
+
+32 bits
+```
+
+```text
+MOV
+
+↓
+
+32 bits
+```
+
+Everything was 32 bits.
+
+---
+
+# Why Was That Good?
+
+Advantages:
+
+* Powerful
+* Fast
+* Many addressing modes
+* Many registers available
+
+---
+
+# But There Was a Problem
+
+Imagine every word in English had exactly 20 letters.
+
+Example:
+
+Instead of
+
+```text
+CAT
+```
+
+you write
+
+```text
+CATXXXXXXXXXXXXXXXXX
+```
+
+It wastes paper.
+
+Similarly,
+
+every ARM instruction occupied
+
+```text
+32 bits
+```
+
+Even simple operations.
+
+Result:
+
+Programs became larger.
+
+---
+
+# Why Was Large Code a Problem?
+
+Think about old mobile phones.
+
+Around the 1990s,
+
+phones had:
+
+* very little Flash memory
+* very little RAM
+* limited battery
+
+A larger program means:
+
+* More Flash memory required
+* Higher cost
+* More power consumption
+
+ARM needed a solution.
+
+---
+
+# Step 2: Thumb (1995)
+
+ARM introduced
+
+```text
+Thumb
+```
+
+Instead of
+
+```text
+32-bit instructions
+```
+
+Thumb mostly used
+
+```text
+16-bit instructions
+```
+
+---
+
+# Visual Comparison
+
+Suppose your program has 100 instructions.
+
+Using ARM:
+
+```text
+100 × 32 bits
+
+↓
+
+3200 bits
+```
+
+Using Thumb:
+
+```text
+100 × 16 bits
+
+↓
+
+1600 bits
+```
+
+Almost half the size!
+
+This means:
+
+* Smaller programs
+* Less Flash usage
+* Lower cost
+
+---
+
+# But There Was a Catch
+
+Thumb instructions were shorter,
+
+so they couldn't express everything.
+
+Example:
+
+ARM instruction:
+
+```text
+32 bits
+
+↓
+
+Many options
+```
+
+Thumb:
+
+```text
+16 bits
+
+↓
+
+Less space
+
+↓
+
+Fewer options
+```
+
+Examples of limitations:
+
+* Fewer register choices
+* Smaller immediate values
+* Fewer addressing modes
+
+---
+
+# ARM7TDMI
+
+The book mentions the ARM7TDMI processor.
+
+It could run in **two modes**:
+
+```text
+ARM State
+
+↓
+
+32-bit Instructions
+
+---------------------
+
+Thumb State
+
+↓
+
+16-bit Instructions
+```
+
+The processor could switch between them.
+
+---
+
+# Real-Life Analogy
+
+Imagine driving.
+
+In the city,
+
+you ride a scooter.
+
+```text
+Small
+
+Cheap
+
+Fuel Efficient
+```
+
+On the highway,
+
+you use a car.
+
+```text
+Powerful
+
+Fast
+```
+
+ARM State = Car 🚗
+
+Thumb State = Scooter 🛵
+
+The processor chooses the appropriate mode.
+
+---
+
+# Step 3: Thumb-2 (2003)
+
+ARM engineers thought:
+
+> "Can we get the best of both worlds?"
+
+Their solution was **Thumb-2**.
+
+Thumb-2 allows a mixture of:
+
+```text
+16-bit Instructions
+
++
+
+32-bit Instructions
+```
+
+in **one instruction set**.
+
+---
+
+# Visual
+
+Instead of choosing:
+
+```text
+Only 16-bit
+```
+
+or
+
+```text
+Only 32-bit
+```
+
+Thumb-2 allows:
+
+```text
+16
+
+16
+
+32
+
+16
+
+32
+
+16
+
+32
+```
+
+Whatever fits best.
+
+---
+
+# Why Is This Better?
+
+Simple instructions:
+
+```text
+16 bits
+```
+
+Complex instructions:
+
+```text
+32 bits
+```
+
+Result:
+
+* Small code size
+* Powerful instructions when needed
+
+---
+
+# Step 4: Cortex-M (2006)
+
+The book says:
+
+> **Cortex-M3 supports only Thumb-2.**
+
+This is extremely important.
+
+Many beginners think Cortex-M supports both ARM and Thumb.
+
+It **does not**.
+
+Cortex-M supports only:
+
+```text
+Thumb-2
+```
+
+There is no ARM state.
+
+---
+
+# Why?
+
+Because Thumb-2 already provides:
+
+* Small code
+* High performance
+* Modern features
+
+There was no need to keep the older ARM instruction state.
+
+---
+
+# Remember Our Earlier Lesson?
+
+We discussed why the vector table stores:
+
+```text
+0x08000101
+```
+
+instead of
+
+```text
+0x08000100
+```
+
+The least significant bit being `1` tells the CPU:
+
+> Execute in **Thumb state**.
+
+Since Cortex-M only supports Thumb instructions, this bit must indicate Thumb state.
+
+---
+
+# Why Can't Cortex-M Run ARM7 Programs?
+
+The book says:
+
+> Cortex-M is not backward compatible with ARM7TDMI binaries.
+
+Imagine:
+
+One person speaks only Telugu.
+
+Another speaks only Japanese.
+
+Can they communicate directly?
+
+No.
+
+Similarly,
+
+ARM7 binaries contain **ARM instructions**.
+
+Cortex-M understands only **Thumb-2 instructions**.
+
+So an ARM7 executable cannot run directly on a Cortex-M.
+
+However, if you have the **source code**, you can usually recompile it for Cortex-M because the compiler will generate Thumb-2 instructions.
+
+---
+
+# ARMv8 Mention
+
+The book says:
+
+> ARMv8 introduced a new 64-bit instruction set.
+
+This refers mainly to processors like:
+
+* Cortex-A53
+* Cortex-A72
+
+used in systems such as Raspberry Pi, smartphones, and application processors.
+
+Your STM32 or other Cortex-M microcontroller is **not** a 64-bit Cortex-A processor.
+
+So you don't need to worry about ARMv8-A right now.
+
+---
+
+# Complete Timeline
+
+```text
+1985
+
+↓
+
+ARM Instruction Set
+
+↓
+
+32-bit Instructions Only
+
+────────────────────────────
+
+1995
+
+↓
+
+ARM7TDMI
+
+↓
+
+ARM + Thumb
+
+(32-bit + 16-bit)
+
+────────────────────────────
+
+2003
+
+↓
+
+Thumb-2
+
+↓
+
+16-bit + 32-bit Together
+
+────────────────────────────
+
+2006
+
+↓
+
+Cortex-M3
+
+↓
+
+Thumb-2 Only
+
+────────────────────────────
+
+Today
+
+↓
+
+STM32
+
+NXP LPC
+
+Nordic nRF52
+
+TI Tiva
+
+↓
+
+Thumb-2
+```
+
+---
+
+# Comparison Table
+
+| Feature          | ARM    | Thumb                       | Thumb-2                                            |
+| ---------------- | ------ | --------------------------- | -------------------------------------------------- |
+| Instruction Size | 32-bit | Mostly 16-bit               | Mix of 16-bit and 32-bit                           |
+| Code Size        | Larger | Smaller                     | Small while still supporting powerful instructions |
+| Performance      | High   | Good                        | High                                               |
+| Cortex-M Support | ❌ No   | Included as part of Thumb-2 | ✅ Yes                                              |
+
+---
+
+# 🎯 Key Points to Remember
+
+1. An **Instruction Set (ISA)** is the collection of instructions a processor understands.
+2. The original **ARM instruction set** used only **32-bit instructions**.
+3. **Thumb** was introduced to reduce program size by using mostly **16-bit instructions**.
+4. **Thumb-2** combines **16-bit and 32-bit instructions** in a single instruction set.
+5. **All Cortex-M processors execute Thumb instructions (Thumb-2 or a subset of it); they do not execute the old ARM instruction set.**
+6. An executable built for an ARM7TDMI using ARM instructions cannot run directly on a Cortex-M because the instruction encodings are different.
+
+---
+
+## 🧠 One Important Clarification
+
+A common misunderstanding is:
+
+> **"Thumb-2 means the processor switches between ARM mode and Thumb mode."**
+
+That's **not true** for Cortex-M.
+
+On a Cortex-M processor:
+
+* There is **only one execution state: Thumb state**.
+* Within that Thumb state, the instruction stream may contain **both 16-bit and 32-bit Thumb instructions**.
+
+So the CPU is **not switching modes**; it is simply decoding Thumb instructions of different lengths.
+
+---
+
+Excellent! This is actually one of the **most important figures in the whole ARM Cortex-M book**.
+
+Most students look at these diagrams and think:
+
+> 😵 "There are hundreds of instructions! Do I have to learn all of these?"
+
+**No.**
+
+These figures are **not asking you to memorize instructions**. They explain **how ARM designed different Cortex-M processors for different applications**.
+
+I'll explain **every part** of both figures.
+
+---
+
+# Figure 5.1 – Evolution of the ARM Instruction Set
+
+Let's first understand the history.
+
+---
+
+## Stage 1 – Original ARM ISA
+
+Initially ARM processors only supported
+
+```text
+ARM Instructions
+
+32-bit only
+```
+
+Example
+
+```assembly
+ADD
+MOV
+SUB
+LDR
+STR
+```
+
+Every instruction occupied
+
+```text
+32 bits
+```
+
+Advantages
+
+* Fast
+* Powerful
+* Many addressing modes
+* Many registers available
+
+Disadvantage
+
+Large program size.
+
+---
+
+## Stage 2 – Thumb
+
+ARM engineers thought
+
+> "Most programs don't need powerful instructions all the time."
+
+So they introduced
+
+```text
+Thumb
+
+16-bit instructions
+```
+
+Now programs became much smaller.
+
+---
+
+### Example
+
+Suppose your program has
+
+100 instructions.
+
+ARM
+
+```text
+100 × 32
+
+↓
+
+3200 bits
+```
+
+Thumb
+
+```text
+100 × 16
+
+↓
+
+1600 bits
+```
+
+Almost half.
+
+---
+
+## But Thumb Had Problems
+
+Because instructions are shorter,
+
+they cannot carry as much information.
+
+Think of it like SMS messages.
+
+Old SMS
+
+```text
+160 characters
+```
+
+Email
+
+```text
+Unlimited
+```
+
+Thumb instructions are like SMS.
+
+ARM instructions are like Email.
+
+Thumb had restrictions.
+
+---
+
+## Stage 3 – Thumb-2
+
+ARM engineers asked
+
+> "Can we combine both?"
+
+Result
+
+```text
+Thumb-2
+
+16-bit
+
++
+
+32-bit
+```
+
+Now
+
+Simple instruction
+
+↓
+
+16 bits
+
+Complex instruction
+
+↓
+
+32 bits
+
+Best of both worlds.
+
+---
+
+## Stage 4 – Cortex-M
+
+Cortex-M processors support
+
+ONLY
+
+```text
+Thumb-2
+```
+
+There is
+
+NO ARM state.
+
+---
+
+# Now Let's Understand Your Second Figure
+
+This figure is one of the best ARM diagrams ever made.
+
+Most people misunderstand it.
+
+---
+
+## What Does This Figure Show?
+
+It shows
+
+> **Which Cortex-M processor supports which instructions.**
+
+Not every Cortex-M processor supports every instruction.
+
+---
+
+Think of mobile phones.
+
+Basic phone
+
+```text
+Calls
+
+SMS
+```
+
+Smartphone
+
+```text
+Calls
+
+SMS
+
+Camera
+
+GPS
+
+AI
+```
+
+Same idea.
+
+---
+
+# Cortex-M0 / M0+ / M1
+
+Look at the green box.
+
+It says
+
+```text
+General data processing
+
+I/O control tasks
+```
+
+Meaning
+
+These processors support only the basic instruction set.
+
+Examples
+
+```assembly
+MOV
+
+ADD
+
+SUB
+
+CMP
+
+B
+
+BL
+
+LDR
+
+STR
+```
+
+Enough for
+
+* LED blinking
+* UART
+* SPI
+* GPIO
+* Timers
+
+These processors are
+
+Small
+
+Cheap
+
+Low Power
+
+---
+
+## Why So Few Instructions?
+
+Because Cortex-M0 is designed for
+
+```text
+Simple Applications
+```
+
+Examples
+
+Remote control
+
+Toy
+
+Mouse
+
+Keyboard
+
+Simple Sensor
+
+Battery Device
+
+No need for complicated instructions.
+
+---
+
+# Cortex-M3
+
+Now look at the blue area.
+
+It says
+
+```text
+Advanced data processing
+
+Hardware Divide
+
+Bit Manipulation
+
+MAC
+```
+
+Let's understand each one.
+
+---
+
+## Hardware Divide
+
+Imagine
+
+```c
+x = a / b;
+```
+
+Some small processors don't have divide hardware.
+
+They perform division using software.
+
+That is slow.
+
+Cortex-M3 adds
+
+```text
+DIV
+```
+
+instruction.
+
+Division becomes much faster.
+
+---
+
+## Bit Manipulation
+
+Suppose
+
+GPIO register
+
+```text
+10110010
+```
+
+You want to modify only one bit.
+
+ARM provides special instructions.
+
+Examples
+
+```assembly
+BFI
+
+BFC
+
+UBFX
+
+SBFX
+```
+
+These manipulate selected bit fields efficiently.
+
+Useful for
+
+Registers
+
+Protocols
+
+Drivers
+
+Embedded programming
+
+---
+
+## MAC
+
+MAC means
+
+Multiply Accumulate
+
+Formula
+
+```text
+A × B + C
+```
+
+Instead of
+
+```assembly
+MUL
+
+ADD
+```
+
+one instruction does both.
+
+Used in
+
+Digital Filters
+
+Signal Processing
+
+Motor Control
+
+Audio
+
+---
+
+# Cortex-M4
+
+Now look at the red box.
+
+```text
+DSP
+
+SIMD
+
+Fast MAC
+
+Saturation Arithmetic
+```
+
+This is where Cortex-M4 becomes powerful.
+
+---
+
+## DSP
+
+DSP
+
+means
+
+Digital Signal Processing.
+
+Used for
+
+Audio
+
+Microphones
+
+Speech
+
+Image Processing
+
+Control Systems
+
+Filtering
+
+FFT
+
+---
+
+## Fast MAC
+
+Earlier
+
+```text
+Multiply
+
+↓
+
+Add
+```
+
+Now
+
+Very fast.
+
+Useful because DSP algorithms perform thousands of multiply-add operations.
+
+---
+
+## SIMD
+
+SIMD means
+
+Single Instruction
+
+Multiple Data
+
+Example
+
+Instead of
+
+```text
+Add
+
+A+B
+
+↓
+
+C+D
+
+↓
+
+E+F
+
+↓
+
+G+H
+```
+
+One instruction performs multiple operations in parallel.
+
+Like adding four numbers at once.
+
+---
+
+## Saturation Arithmetic
+
+Normal arithmetic
+
+```text
+255 + 1
+
+↓
+
+0
+```
+
+(overflow in an 8-bit unsigned value)
+
+Sometimes,
+
+especially in DSP,
+
+overflow wrapping is undesirable.
+
+Saturation arithmetic instead limits the result.
+
+```text
+255 + 1
+
+↓
+
+255
+```
+
+or for signed values,
+
+```text
+127 + 1
+
+↓
+
+127
+```
+
+This prevents distortion in signal-processing algorithms.
+
+---
+
+# Cortex-M4 with FPU
+
+Now the top orange box.
+
+It says
+
+```text
+Floating Point Operations
+```
+
+This means
+
+Hardware support for
+
+```c
+float
+
+double
+```
+
+Example
+
+```c
+float a = 2.5;
+float b = 1.3;
+
+float c = a + b;
+```
+
+Without FPU
+
+Software performs floating-point calculations.
+
+Slow.
+
+With FPU
+
+Hardware performs them directly.
+
+Much faster.
+
+Useful for
+
+Robotics
+
+Control Systems
+
+Machine Learning
+
+Sensor Fusion
+
+Kalman Filters
+
+---
+
+# Now Let's Understand the Huge Instruction Table
+
+The second image lists
+
+all Thumb instructions.
+
+Don't panic.
+
+---
+
+## Green Section
+
+Basic Instructions
+
+Examples
+
+```assembly
+MOV
+
+ADD
+
+SUB
+
+CMP
+
+B
+
+BL
+
+LDR
+
+STR
+
+PUSH
+
+POP
+```
+
+Supported by
+
+```text
+M0
+
+M0+
+
+M1
+
+M3
+
+M4
+```
+
+Everyone has them.
+
+---
+
+## Blue Section
+
+Advanced Instructions
+
+Examples
+
+```assembly
+SDIV
+
+UDIV
+
+BFI
+
+BFC
+
+UBFX
+
+SBFX
+```
+
+Supported by
+
+```text
+M3
+
+M4
+```
+
+Not supported on
+
+```text
+M0
+```
+
+---
+
+## Red Section
+
+DSP Instructions
+
+Examples
+
+```assembly
+SMLAD
+
+SMLAL
+
+SMUAD
+
+QADD
+
+QSUB
+```
+
+Supported only on
+
+```text
+M4
+```
+
+---
+
+## Orange Section
+
+Floating Point
+
+Examples
+
+```assembly
+VADD
+
+VMUL
+
+VDIV
+
+VSUB
+```
+
+These are available only on Cortex-M4 variants that include an FPU (and newer cores like M7/M33 with FP support, depending on the implementation).
+
+---
+
+# Why Didn't ARM Put Everything Into Cortex-M0?
+
+Imagine buying a bicycle.
+
+Do you need
+
+* Air conditioning?
+* Six airbags?
+* Cruise control?
+
+No.
+
+That would make it expensive.
+
+Similarly,
+
+Cortex-M0 is designed to be:
+
+* Small
+* Cheap
+* Low power
+
+So ARM removed advanced instructions to reduce silicon area and cost.
+
+---
+
+# Which Instructions Should **You** Learn?
+
+Since you're learning **embedded systems**, don't try to learn all 150+ instructions.
+
+### Phase 1 (Must Know)
+
+```assembly
+MOV
+LDR
+STR
+ADD
+SUB
+CMP
+B
+BL
+BX
+PUSH
+POP
+```
+
+These cover most compiler-generated code you'll see.
+
+---
+
+### Phase 2
+
+```assembly
+AND
+ORR
+EOR
+LSL
+LSR
+ASR
+MUL
+```
+
+These are common in embedded drivers and bit manipulation.
+
+---
+
+### Phase 3
+
+Learn advanced instructions only if you work with:
+
+* DSP
+* Audio processing
+* Motor control
+* Image processing
+* Machine learning
+* CMSIS-DSP libraries
+
+---
+
+# Complete Picture
+
+```text
+                 ARM ISA Evolution
+
+32-bit ARM
+     │
+     ▼
+Thumb
+(16-bit)
+     │
+     ▼
+Thumb-2
+(16 + 32-bit)
+     │
+     ▼
+──────────────────────────────────────
+
+Cortex-M0
+│
+├── Basic instructions
+
+──────────────────────────────────────
+
+Cortex-M3
+│
+├── Basic instructions
+├── Divide
+├── Bit-field instructions
+└── MAC
+
+──────────────────────────────────────
+
+Cortex-M4
+│
+├── M3 features
+├── DSP
+├── SIMD
+├── Saturation arithmetic
+└── Fast MAC
+
+──────────────────────────────────────
+
+Cortex-M4 + FPU
+│
+└── Floating-point instructions
+```
+
+# 🎯 The most important takeaway
+
+**Don't memorize the instruction table.**
+
+Instead, remember **why** the instruction set grows:
+
+* **Cortex-M0/M0+/M1** → General embedded control (LEDs, GPIO, UART, timers).
+* **Cortex-M3** → Adds instructions that make general embedded software more efficient (hardware divide, bit-field operations, MAC).
+* **Cortex-M4** → Adds DSP instructions for signal processing.
+* **Cortex-M4 with FPU** → Adds hardware floating-point instructions for fast `float` and `double` calculations.
+
